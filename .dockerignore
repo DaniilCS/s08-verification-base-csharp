@@ -1,0 +1,13 @@
+.git
+.github
+.vscode
+**/bin
+**/obj
+TestResults
+Evidence
+Publish
+.env
+.env.*
+*.user
+.vs
+.idea

@@ -1,0 +1,22 @@
+@baseUrl = http://localhost:8080
+
+### 0. Готовность приложения: 200, status=ok.
+GET {{baseUrl}}/health
+
+### 1. Реально используемая публичная конфигурация.
+GET {{baseUrl}}/info
+
+### 2. Текущие заметки (после перезапуска список пустой).
+GET {{baseUrl}}/notes
+
+### 3. Создание заметки: 201.
+POST {{baseUrl}}/notes
+Content-Type: application/json
+
+{"text":"hello from S08"}
+
+### 4. Пустой текст: 400.
+POST {{baseUrl}}/notes
+Content-Type: application/json
+
+{"text":""}

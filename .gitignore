@@ -1,0 +1,12 @@
+# Локальная конфигурация. Пример .env.example хранится в Git.
+.env
+.env.*
+!.env.example
+bin/
+obj/
+TestResults/
+Evidence/
+Publish/
+.vs/
+.idea/
+*.user
