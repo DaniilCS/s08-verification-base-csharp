@@ -65,3 +65,34 @@ jobs:
             Publish/
           if-no-files-found: warn
           retention-days: 30
+
+  publish-image:
+    name: Publish image to Docker Hub
+    needs: build-and-test
+    if: >-
+      github.ref == 'refs/heads/main' &&
+      (github.event_name == 'push' || github.event_name == 'workflow_dispatch')
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+
+    env:
+      DOCKERHUB_USERNAME: ${{ vars.DOCKERHUB_USERNAME }}
+      IMAGE: docker.io/${{ vars.DOCKERHUB_USERNAME }}/s08-demo:${{ github.sha }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+
+      - name: Build Docker image
+        run: docker build --tag "$IMAGE" .
+
+      - name: Log in and push to Docker Hub
+        shell: bash
+        env:
+          DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
+        run: |
+          printf '%s' "$DOCKERHUB_TOKEN" | docker login \
+            --username "$DOCKERHUB_USERNAME" --password-stdin
+          docker push "$IMAGE"
